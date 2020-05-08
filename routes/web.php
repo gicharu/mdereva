@@ -52,4 +52,4 @@ Route::get('/m-dereva-bot/remove-webhook', 'M_DerevaBotController@removeWebhook'
 | THEN SET THAT WEBHOOK WITH TELEGRAM.
 | SO YOU CAN BE SURE THE UPDATES ARE COMING FROM TELEGRAM ONLY.
 */
-Route::post( '/m_dereva-bot/' . env('TELEGRAM_BOT_TOKEN') . '/webhook', 'M_DerevaBotController@webhook')->name('m_dereva-webhook');
+Route::post( '/m-dereva-bot/' . env('TELEGRAM_BOT_TOKEN') . '/webhook', 'M_DerevaBotController@webhook')->name('m_dereva-webhook');
