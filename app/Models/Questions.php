@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
-class Questions extends Model
+class Questions extends BaseModel
 {
     use CrudTrait;
 
@@ -19,7 +19,7 @@ class Questions extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+     protected $fillable = ['question', 'media', 'score', 'duration'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -28,6 +28,13 @@ class Questions extends Model
     | FUNCTIONS
     |--------------------------------------------------------------------------
     */
+    public static function boot()
+    {
+        parent::boot();
+        static::deleting(function($obj) {
+            Storage::disk('storage')->delete($obj->media);
+        });
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -56,4 +63,15 @@ class Questions extends Model
     | MUTATORS
     |--------------------------------------------------------------------------
     */
+
+    public function setMediaAttribute($value)
+    {
+        $attribute_name = "media";
+        $disk = "storage";
+        $destination_path = "question_media/{$this->id}";
+
+        $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
+
+        // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
+    }
 }

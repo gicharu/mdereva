@@ -34,14 +34,37 @@ class QuestionsCrudController extends CrudController
 
     protected function setupCreateOperation()
     {
-        $this->crud->setValidation(QuestionsRequest::class);
-
-        // TODO: remove setFromDb() and manually define Fields
-        $this->crud->setFromDb();
+        $this->setupAddUpdateOprations();
     }
 
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        $this->setupAddUpdateOprations();
+
+
+    }
+
+    protected function setupAddUpdateOprations()
+    {
+        $this->crud->setValidation(QuestionsRequest::class);
+
+        $this->crud->addField([
+            'name' => 'question',
+            'type' => 'textarea'
+        ]);
+        $this->crud->addField([
+            'name' => 'media',
+            'type' => 'upload',
+            'upload' => 'true'
+        ]);
+        $this->crud->addField([
+            'name' => 'score',
+            'type' => 'number',
+        ]);
+        $this->crud->addField([
+            'name' => 'duration',
+            'type' => 'number',
+            'label' => 'Duration (seconds)'
+        ]);
     }
 }

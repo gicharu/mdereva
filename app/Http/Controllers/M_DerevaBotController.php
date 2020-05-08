@@ -27,8 +27,8 @@ class M_DerevaBotController extends Controller
 
     public function setWebHook()
     {
-//        $url = secure_url("m_dereva-bot/" . env('TELEGRAM_BOT_TOKEN') . "/webhook");
-        $url = "https://bd200613.ngrok.io/" . env('TELEGRAM_BOT_TOKEN') . "/webhook";
+        $url = secure_url("m_dereva-bot/" . env('TELEGRAM_BOT_TOKEN') . "/webhook");
+//        $url = "https://bd200613.ngrok.io/" . env('TELEGRAM_BOT_TOKEN') . "/webhook";
 //        die($url);
         try {
             $this->telegram->setWebhook(['url' => $url]);
