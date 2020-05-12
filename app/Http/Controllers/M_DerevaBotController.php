@@ -124,7 +124,7 @@ class M_DerevaBotController extends Controller
             $this->telegram->sendPhoto([
                 'chat_id' => $chatId,
 //                'photo'=> secure_url($question->media)
-                'photo'=> InputFile::create($question->mediau)
+                'photo'=> InputFile::create($question->media)
             ]);
         }
         return $this->telegram->sendPoll([
