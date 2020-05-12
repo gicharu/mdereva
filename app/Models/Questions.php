@@ -19,7 +19,7 @@ class Questions extends BaseModel
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-     protected $fillable = ['question', 'media', 'score', 'duration'];
+     protected $fillable = ['question', 'media', 'media_type', 'score', 'duration'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -32,7 +32,7 @@ class Questions extends BaseModel
     {
         parent::boot();
         static::deleting(function($obj) {
-            Storage::disk('storage')->delete($obj->media);
+            Storage::disk('media')->delete($obj->media);
         });
     }
 
@@ -67,7 +67,7 @@ class Questions extends BaseModel
     public function setMediaAttribute($value)
     {
         $attribute_name = "media";
-        $disk = "storage";
+        $disk = "media";
         $destination_path = "question_media/{$this->id}";
 
         $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);

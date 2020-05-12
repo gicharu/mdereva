@@ -28,8 +28,38 @@ class QuestionsCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        // TODO: remove setFromDb() and manually define Columns, maybe Filters
-        $this->crud->setFromDb();
+        $this->crud->addColumn([
+            'name' => 'question', // The db column name
+            'type' => 'Text'
+        ]);
+        $this->crud->addColumn([
+            'name' => 'media', // The db column name
+            'type' => 'image'
+        ]);
+         $this->crud->addColumn([
+            'name' => 'score', // The db column name
+            'type' => 'Text'
+        ]);
+         $this->crud->addColumn([
+            'name' => 'duration', // The db column name
+            'type' => 'Text'
+        ]);
+
+    }
+
+    protected function setupShowOperation()
+    {
+        $this->crud->addColumn([
+            'name' => 'questions',
+            'label' => '',
+            'type' => 'table',
+            'columns' => [
+                'name'  => 'Name',
+                'media'  => 'Description',
+                'score' => 'Price',
+                'duration' => 'Duration',
+            ]
+        ]);
     }
 
     protected function setupCreateOperation()
@@ -56,6 +86,12 @@ class QuestionsCrudController extends CrudController
             'name' => 'media',
             'type' => 'upload',
             'upload' => 'true'
+        ]);
+        $this->crud->addField([
+            'name' => 'media_type',
+            'type' => 'select_from_array',
+            'options' => ['Image', 'Video'],
+            'default' => 0
         ]);
         $this->crud->addField([
             'name' => 'score',

@@ -47,6 +47,12 @@ return [
             'driver' => 'local',
             'root' => storage_path('app'),
         ],
+        'media' => [
+            'driver' => 'local',
+            'root' => storage_path('media'),
+            'url' => env('APP_URL').'/storage',
+
+        ],
 
         'public' => [
             'driver' => 'local',
@@ -80,6 +86,7 @@ return [
 
     'links' => [
         public_path('storage') => storage_path('app/public'),
+        public_path('question_media') => storage_path('media/question_media'),
     ],
 
 ];

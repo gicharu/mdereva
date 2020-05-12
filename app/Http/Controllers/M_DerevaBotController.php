@@ -8,6 +8,7 @@ use App\Models\Questions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use Telegram\Bot\Keyboard\Keyboard;
@@ -107,16 +108,27 @@ class M_DerevaBotController extends Controller
                 $correctAnswer = $key;
             }
         }
+        $duration = 10;
+        if(isset($question->duration)) {
+            $duration = $question->duration;
+        }
 //        Log::debug($quiz->get('id')); die;
         $quiz->options = $answersArray;
         $username = Cache::get('username');
         $chatId = Cache::get("$username.chat_id");
+        if(Storage::disk('media')->exists($question->media)) {
+            $this->telegram->sendPhoto([
+                'chat_id' => $chatId,
+                'photo'=> secure_url($question->media)
+            ]);
+        }
         return $this->telegram->sendPoll([
             'chat_id' => $chatId,
             'type' => 'quiz',
             'question' => $question->question,
             'options' => $answersArray,
             'correct_option_id' => $correctAnswer,
+            'close_date' => $duration
         ]);
     }
 
