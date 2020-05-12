@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
+use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Keyboard\Keyboard;
 use Telegram\Bot\Objects\Poll;
 use Telegram\Bot\Objects\PollOption;
@@ -119,9 +120,11 @@ class M_DerevaBotController extends Controller
         Log::debug(secure_url($question->media));
         Log::debug(Storage::disk('media')->exists($question->media));
         if(Storage::disk('media')->exists($question->media)) {
+
             $this->telegram->sendPhoto([
                 'chat_id' => $chatId,
-                'photo'=> secure_url($question->media)
+//                'photo'=> secure_url($question->media)
+                'photo'=> InputFile::create($question->mediau)
             ]);
         }
         return $this->telegram->sendPoll([
