@@ -116,6 +116,7 @@ class M_DerevaBotController extends Controller
         $quiz->options = $answersArray;
         $username = Cache::get('username');
         $chatId = Cache::get("$username.chat_id");
+        Log::debug(Storage::disk('media')->exists($question->media));
         if(Storage::disk('media')->exists($question->media)) {
             $this->telegram->sendPhoto([
                 'chat_id' => $chatId,
