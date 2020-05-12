@@ -15,7 +15,7 @@ class Answers extends BaseModel
     */
 
     protected $table = 'answers';
-    // protected $primaryKey = 'id';
+     protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
      protected $fillable = ['questionId', 'answer', 'correct'];
