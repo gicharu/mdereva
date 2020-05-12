@@ -37,11 +37,31 @@ class AnswersCrudController extends CrudController
         $this->crud->setValidation(AnswersRequest::class);
 
         // TODO: remove setFromDb() and manually define Fields
-        $this->crud->setFromDb();
+        $this->setupAddUpdateOprations();
     }
 
     protected function setupUpdateOperation()
     {
-        $this->setupCreateOperation();
+        $this->setupAddUpdateOprations();
+    }
+
+    protected function setupAddUpdateOprations()
+    {
+        $this->crud->setValidation(AnswersRequest::class);
+
+        $this->crud->addField([
+            'name' => 'questionId',
+            'type' => 'select',
+            'entity' => 'question',
+            'attribute' => 'question'
+        ]);
+        $this->crud->addField([
+            'name' => 'answer',
+            'type' => 'textarea',
+        ]);
+        $this->crud->addField([
+            'name' => 'correct',
+            'type' => 'checkbox',
+        ]);
     }
 }

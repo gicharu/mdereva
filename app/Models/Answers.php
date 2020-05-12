@@ -3,9 +3,8 @@
 namespace App\Models;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
-use Illuminate\Database\Eloquent\Model;
 
-class Answers extends Model
+class Answers extends BaseModel
 {
     use CrudTrait;
 
@@ -19,7 +18,7 @@ class Answers extends Model
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    // protected $fillable = [];
+     protected $fillable = ['questionId', 'answer', 'correct'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -34,6 +33,10 @@ class Answers extends Model
     | RELATIONS
     |--------------------------------------------------------------------------
     */
+
+    public function question() {
+        return $this->hasOne(Questions::class, 'questionId');
+    }
 
     /*
     |--------------------------------------------------------------------------
