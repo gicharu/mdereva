@@ -35,7 +35,7 @@ class Answers extends BaseModel
     */
 
     public function question() {
-        return $this->hasOne(Questions::class, 'questionId');
+        return $this->hasOne(Questions::class, 'id');
     }
 
     /*
