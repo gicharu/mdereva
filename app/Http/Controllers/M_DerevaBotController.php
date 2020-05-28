@@ -103,7 +103,7 @@ class M_DerevaBotController extends Controller
             Log::debug($collectionKey);
             Log::debug($skipQuestions);
         }
-        Log::debug($update->getMessage()->poll->question);
+        //Log::debug($update->getMessage()->poll->question);
         $question = Questions::inRandomOrder()->first();
         $answers = $question->answers;
 
