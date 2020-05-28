@@ -92,11 +92,21 @@ class M_DerevaBotController extends Controller
     protected function nextQuestion(Update $update)
     {
         Log::debug($update);
+        $quiz = new Poll($update);
+        $username = Cache::get('username');
+        $collectionCache = Cache::get("$username.collection");
+        $collection = collect($collectionCache);
+        $skipQuestions = [];
+        if(isset($quiz->question)) {
+            $skipQuestions = $collection->pluck('id');
+            $collectionKey = $collection->search($quiz->question);
+            Log::debug($collectionKey);
+            Log::debug($skipQuestions);
+        }
+        Log::debug($update->getMessage()->poll->question);
         $question = Questions::inRandomOrder()->first();
         $answers = $question->answers;
 
-        $quiz = new Poll($update);
-        Log::debug($update->getMessage()->poll);
         $answersArray = [];
         $answerOption = new PollOption($update);
         $correctAnswer = 0;
@@ -112,7 +122,12 @@ class M_DerevaBotController extends Controller
         }
 //        Log::debug($quiz->get('id')); die;
         $quiz->options = $answersArray;
-        $username = Cache::get('username');
+        $collection->push([
+            'id' => $question->id,
+            'question' => $question,
+            'answerIndex' => $correctAnswer,
+            'score' => 0
+        ]);
         $chatId = Cache::get("$username.chat_id");
         Log::debug(secure_url($question->media));
         Log::debug(Storage::disk('media')->exists($question->media));
