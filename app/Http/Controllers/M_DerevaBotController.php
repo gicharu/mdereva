@@ -96,7 +96,7 @@ class M_DerevaBotController extends Controller
         $answers = $question->answers;
 
         $quiz = new Poll($update);
-        Log::debug($quiz->options);
+        Log::debug($update->getMessage()->poll);
         $answersArray = [];
         $answerOption = new PollOption($update);
         $correctAnswer = 0;
