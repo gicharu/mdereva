@@ -37,13 +37,11 @@ class M_DerevaBotController extends Controller
         } catch (TelegramSDKException $e) {
             Log::error($e->getMessage() . ' ' . $e->getFile() . ' ' . $e->getLine());
         }
-
     }
 
     public function removeWebhook()
     {
         $this->telegram->removeWebhook();
-
     }
 
     public function webhook(Request $request)
@@ -55,8 +53,7 @@ class M_DerevaBotController extends Controller
             return $this->nextQuestion($update);
         }
         if (isset($message)) {
-
-            $username = $message->chat->firstName  . '_' . $message->chat->lastName;
+            $username = $message->chat->firstName . '_' . $message->chat->lastName;
             Cache::put("username", $username);
             Cache::put("$username.chat_id", $message->chat->id);
             //$chatId = $update->getChat()->getId();
@@ -68,15 +65,11 @@ class M_DerevaBotController extends Controller
         }
 
 
-
-
         return $this->start($update);
-
     }
 
     protected function start(Update $update)
     {
-
         $name = $update->getMessage()->getFrom()->getFirstName();
 //        echo $name; die;
         $text = "Hello, $name! Please select an item from the menu to proceed";
@@ -87,15 +80,18 @@ class M_DerevaBotController extends Controller
 //            ->row(Keyboard::button(['text' => "Learning stages"]))
 //            ->row(Keyboard::button(['text' => "Events"]))
 //            ->row(Keyboard::button(['text' => 'Contacts']));
-        return $this->telegram->sendMessage([
-            'chat_id' => $update->getChat()->getId(),
-            'text' => $text,
-            'reply_markup' => $keyboard
-        ]);
+        return $this->telegram->sendMessage(
+            [
+                'chat_id' => $update->getChat()->getId(),
+                'text' => $text,
+                'reply_markup' => $keyboard
+            ]
+        );
     }
 
     protected function nextQuestion(Update $update)
     {
+        Log::debug($update);
         $question = Questions::inRandomOrder()->first();
         $answers = $question->answers;
 
@@ -103,14 +99,14 @@ class M_DerevaBotController extends Controller
         $answersArray = [];
         $answerOption = new PollOption($update);
         $correctAnswer = 0;
-        foreach ($answers as $key  => $answer) {
+        foreach ($answers as $key => $answer) {
             $answersArray[$key] = $answerOption->text = $answer->answer;
-            if($answer->correct) {
+            if ($answer->correct) {
                 $correctAnswer = $key;
             }
         }
         $duration = 10;
-        if(isset($question->duration)) {
+        if (isset($question->duration)) {
             $duration = $question->duration;
         }
 //        Log::debug($quiz->get('id')); die;
@@ -119,22 +115,35 @@ class M_DerevaBotController extends Controller
         $chatId = Cache::get("$username.chat_id");
         Log::debug(secure_url($question->media));
         Log::debug(Storage::disk('media')->exists($question->media));
-        if(Storage::disk('media')->exists($question->media)) {
-
-            $this->telegram->sendPhoto([
-                'chat_id' => $chatId,
+        if (Storage::disk('media')->exists($question->media)) {
+            if ($question->mediaType == Questions::QUESTION_MEDIA_TYPE_IMAGE) {
+                $this->telegram->sendPhoto(
+                    [
+                        'chat_id' => $chatId,
 //                'photo'=> secure_url($question->media)
-                'photo'=> InputFile::create($question->media)
-            ]);
+                        'photo' => InputFile::create($question->media)
+                    ]
+                );
+            }
+            if ($question->mediaType == Questions::QUESTION_MEDIA_TYPE_VIDEO) {
+                $this->telegram->sendVideo(
+                    [
+                        'chat_id' => $chatId,
+                        'video' => InputFile::create($question->media)
+                    ]
+                );
+            }
         }
-        return $this->telegram->sendPoll([
-            'chat_id' => $chatId,
-            'type' => 'quiz',
-            'question' => $question->question,
-            'options' => $answersArray,
-            'correct_option_id' => $correctAnswer,
-            'close_date' => $duration
-        ]);
+        return $this->telegram->sendPoll(
+            [
+                'chat_id' => $chatId,
+                'type' => 'quiz',
+                'question' => $question->question,
+                'options' => $answersArray,
+                'correct_option_id' => $correctAnswer,
+                'close_date' => $duration
+            ]
+        );
     }
 
 }

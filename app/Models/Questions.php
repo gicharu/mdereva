@@ -15,11 +15,14 @@ class Questions extends BaseModel
     |--------------------------------------------------------------------------
     */
 
+    const QUESTION_MEDIA_TYPE_IMAGE = 0;
+    const QUESTION_MEDIA_TYPE_VIDEO = 1;
+
     protected $table = 'questions';
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-     protected $fillable = ['question', 'media', 'media_type', 'score', 'duration'];
+    protected $fillable = ['question', 'media', 'media_type', 'score', 'duration'];
     // protected $hidden = [];
     // protected $dates = [];
 
@@ -31,9 +34,11 @@ class Questions extends BaseModel
     public static function boot()
     {
         parent::boot();
-        static::deleting(function($obj) {
-            Storage::disk('media')->delete($obj->media);
-        });
+        static::deleting(
+            function ($obj) {
+                Storage::disk('media')->delete($obj->media);
+            }
+        );
     }
 
     /*
@@ -42,8 +47,9 @@ class Questions extends BaseModel
     |--------------------------------------------------------------------------
     */
 
-    public function answers() {
-        return $this->hasMany(Answers::class , 'questionId');
+    public function answers()
+    {
+        return $this->hasMany(Answers::class, 'questionId');
     }
 
     /*
@@ -71,7 +77,6 @@ class Questions extends BaseModel
         $destination_path = "question_media/{$this->id}";
 
         $this->uploadFileToDisk($value, $attribute_name, $disk, $destination_path);
-
         // return $this->attributes[{$attribute_name}]; // uncomment if this is a translatable field
     }
 }
