@@ -93,7 +93,7 @@ class M_DerevaBotController extends Controller
     {
         $quiz = new Poll($update);
 
-        Log::debug("Quiz here \n" . $quiz);
+        Log::debug("Quiz here \n" . $quiz->question);
         $username = Cache::get('username');
         $collectionCache = Cache::get("$username.collection");
         $collection = collect($collectionCache);
