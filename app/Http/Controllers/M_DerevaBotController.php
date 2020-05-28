@@ -91,8 +91,8 @@ class M_DerevaBotController extends Controller
 
     protected function nextQuestion(Update $update)
     {
-        Log::debug($update);
         $quiz = new Poll($update);
+        Log::debug($quiz);
         $username = Cache::get('username');
         $collectionCache = Cache::get("$username.collection");
         $collection = collect($collectionCache);
