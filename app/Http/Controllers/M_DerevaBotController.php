@@ -167,8 +167,9 @@ class M_DerevaBotController extends Controller
                         'video' => InputFile::create($question->media)
                     ]
                 );
-            }
+
         }
+        Cache::put("$username.collection", $collection);
         return $this->telegram->sendPoll(
             [
                 'chat_id' => $chatId,
