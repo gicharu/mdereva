@@ -188,7 +188,7 @@ class M_DerevaBotController extends Controller
             [
                 'chat_id' => $chatId,
                 'type' => 'quiz',
-                'question' => $question->question,
+                'question' => $question['question'],
                 'options' => $answersArray,
                 'correct_option_id' => $correctAnswer,
                 'close_date' => $duration
