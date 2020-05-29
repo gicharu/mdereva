@@ -109,7 +109,7 @@ class M_DerevaBotController extends Controller
             $skipQuestions = $collection->pluck('id');
             $answeredQuestion = $collection->pop();
             $options = $quiz->options;
-            foreach ($options as $optionKey => $option)
+            foreach ($options as $optionKey => $option) {
                 Log::debug($option);
                 if ($option->voterCount == 1 && $answeredQuestion['answerIndex'] == $optionKey) {
                     $answeredQuestion['score'] = 1;
@@ -154,7 +154,7 @@ class M_DerevaBotController extends Controller
             ]
         );
         $chatId = Cache::get("$username.chat_id");
-        if(!isset($chatId)) {
+        if (!isset($chatId)) {
             $chatId = $update->getChat()->id;
         }
         Log::debug(secure_url($question->media));
