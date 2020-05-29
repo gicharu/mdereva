@@ -101,7 +101,7 @@ class M_DerevaBotController extends Controller
         $collectionCache = Cache::get("$username.collection");
         $collection = collect($collectionCache);
         $skipQuestions = [];
-        Log::debug("collection \n" . $collection);
+        Log::debug("question \n" . isset($quiz->question));
         if (isset($quiz->question)) {
             $skipQuestions = $collection->pluck('id');
             $answeredQuestion = $collection->pop();
