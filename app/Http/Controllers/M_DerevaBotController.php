@@ -118,7 +118,7 @@ class M_DerevaBotController extends Controller
             Log::debug($collection->all());
             Log::debug($skipQuestions->all());
         }
-        if (count($skipQuestions) > 1) {
+        if ($skipQuestions->count() > 1) {
             Log::debug($skipQuestions->unique()->all());
             $question = Questions::where('id', 'not in', $skipQuestions->unique()->all())->first();
         } else {
