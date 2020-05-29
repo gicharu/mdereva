@@ -114,7 +114,13 @@ class M_DerevaBotController extends Controller
             Log::debug($skipQuestions);
         }
         //Log::debug($update->getMessage()->poll->question);
-        $question = Questions::where('id', 'not in', $skipQuestions)->first();
+        if(count($skipQuestions) > 1) {
+            $question = Questions::where('id', 'not in', $skipQuestions)->first();
+
+        } else {
+
+            $question = Questions::first();
+        }
         $answers = $question->answers;
 
         $answersArray = [];
