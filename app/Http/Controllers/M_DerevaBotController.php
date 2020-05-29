@@ -53,7 +53,7 @@ class M_DerevaBotController extends Controller
             return $this->nextQuestion($update);
         }
         if (isset($message)) {
-            $username = $message->chat->firstName . '_' . $message->chat->lastName;
+            $username = $message->chat->firstName;
             Cache::put("username", $username);
             Cache::put("$username.chat_id", $message->chat->id);
             //$chatId = $update->getChat()->getId();
