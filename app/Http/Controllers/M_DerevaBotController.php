@@ -104,6 +104,7 @@ class M_DerevaBotController extends Controller
         Log::debug("collection \n" . $collection);
         Log::debug("Quiz \n" . $quiz->options);
         if (isset($quiz->options)) {
+            Log::debug("inside");
 
             $skipQuestions = $collection->pluck('id');
             $answeredQuestion = $collection->pop();
