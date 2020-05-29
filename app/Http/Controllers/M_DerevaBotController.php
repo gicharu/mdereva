@@ -147,7 +147,7 @@ class M_DerevaBotController extends Controller
             ]
         );
         $chatId = Cache::get("$username.chat_id");
-        if(isset($chatId)) {
+        if(!isset($chatId)) {
             $chatId = $update->getChat()->id;
         }
         Log::debug(secure_url($question->media));
