@@ -110,12 +110,12 @@ class M_DerevaBotController extends Controller
                 $answeredQuestion['score'] = 1;
             }
             $collection->push($answeredQuestion);
-            Log::debug($collection);
-            Log::debug($skipQuestions);
+            Log::debug($collection->all());
+            Log::debug($skipQuestions->all());
         }
         //Log::debug($update->getMessage()->poll->question);
         if (count($skipQuestions) > 1) {
-            $question = Questions::where('id', 'not in', $skipQuestions)->first();
+            $question = Questions::where('id', 'not in', $skipQuestions->all())->first();
         } else {
             $question = Questions::first();
         }
@@ -142,7 +142,7 @@ class M_DerevaBotController extends Controller
         $collection->push(
             [
                 'id' => $question->id,
-                'question' => $question,
+                'question' => $question->question,
                 'answerIndex' => $correctAnswer,
                 'score' => 0
             ]
