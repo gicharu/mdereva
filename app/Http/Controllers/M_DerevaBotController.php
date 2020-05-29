@@ -116,12 +116,12 @@ class M_DerevaBotController extends Controller
             }
             $collection->push($answeredQuestion);
             Log::debug($answeredQuestion);
-            Log::debug($skipQuestions->all());
 
         }
-        $rsQuestions = Questions::limit(5)->get();
+        $rsQuestions = Questions::limit(10)->get();
         if ($skipQuestions->count() > 0) {
             $skipArray = $skipQuestions->unique()->all();
+            Log::debug($skipArray);
             $question = $rsQuestions->whereNotIn('id', $skipArray)->first();
             Log::debug("question");
             Log::debug($question);
