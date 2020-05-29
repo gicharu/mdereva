@@ -154,7 +154,7 @@ class M_DerevaBotController extends Controller
         }
         $collection->push(
             [
-                'id' => $question->id,
+                'id' => $question['id'],
                 'question' => $question->question,
                 'answerIndex' => $correctAnswer,
                 'score' => 0
