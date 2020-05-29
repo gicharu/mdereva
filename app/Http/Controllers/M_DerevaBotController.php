@@ -111,7 +111,7 @@ class M_DerevaBotController extends Controller
             $options = $quiz->options;
             foreach ($options as $optionKey => $option) {
                 Log::debug($option);
-                if ($option->voterCount == 1 && $answeredQuestion['answerIndex'] == $optionKey) {
+                if ($option['voter_count'] == 1 && $answeredQuestion['answerIndex'] == $optionKey) {
                     $answeredQuestion['score'] = 1;
                 }
             }
