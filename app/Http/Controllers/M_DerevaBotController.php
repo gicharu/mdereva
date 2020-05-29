@@ -123,11 +123,12 @@ class M_DerevaBotController extends Controller
             Log::debug( "skip");
             Log::debug( "skip" .$skipQuestions->unique()->all());
             $question = Questions::where('id', 'not in', $skipQuestions->unique()->all())->first();
-            $answers = $question->answers;
             Log::debug("question" . $skipQuestions->unique()->all());
 
         } else {
             $question = Questions::first();
+            $answers = $question->answers;
+
         }
         Log::debug("Question obj 126 \n $question");
 
