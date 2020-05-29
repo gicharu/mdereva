@@ -119,19 +119,19 @@ class M_DerevaBotController extends Controller
             Log::debug($skipQuestions->all());
 
         }
+        $rsQuestions = Questions::limit(5)->get();
         if ($skipQuestions->count() > 0) {
-            Log::debug( "skip");
             $skipArray = $skipQuestions->unique()->all();
-            Log::debug($skipArray);
-
-            $question = Questions::whereNotIn('id', $skipArray)->first();
+            $question = $rsQuestions->whereNotIn('id', $skipArray)->first();
             Log::debug("question");
+            Log::debug($question);
+
 
         } else {
-            $question = Questions::first();
-            $answers = $question->answers;
+            $question = $rsQuestions->first();
 
         }
+        $answers = $question->answers;
         Log::debug("Collection obj 126 \n $collection");
         Log::debug(var_dump($question));
 
@@ -140,10 +140,9 @@ class M_DerevaBotController extends Controller
         }
 
         $answersArray = [];
-        $answerOption = new PollOption($update);
         $correctAnswer = 0;
         foreach ($answers as $key => $answer) {
-            $answersArray[$key] = $answerOption->text = $answer->answer;
+            $answersArray[$key] = $answer->answer;
             if ($answer->correct) {
                 $correctAnswer = $key;
             }
