@@ -109,7 +109,8 @@ class M_DerevaBotController extends Controller
             $skipQuestions = $collection->pluck('id');
             $answeredQuestion = $collection->pop();
             $options = $quiz->options;
-            foreach ($options as $optionKey => $option) {
+            foreach ($options as $optionKey => $option)
+                Log::debug($option);
                 if ($option->voterCount == 1 && $answeredQuestion['answerIndex'] == $optionKey) {
                     $answeredQuestion['score'] = 1;
                 }
