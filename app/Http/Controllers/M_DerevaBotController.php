@@ -185,7 +185,7 @@ class M_DerevaBotController extends Controller
     {
         $result = $collection->sum('score');
         $total = $collection->count();
-        $message = "Congratulations you have scored <br /> <b>$result / $total</b>"
+        $message = "Congratulations you have scored <br /> <b>$result / $total</b>";
         $this->telegram->sendMessage(
             [
                 'chat_id' => $update->getChat()->id,
