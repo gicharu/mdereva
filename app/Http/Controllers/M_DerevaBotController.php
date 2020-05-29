@@ -120,7 +120,8 @@ class M_DerevaBotController extends Controller
 
         }
         if ($skipQuestions->count() > 0) {
-            Log::debug("skip" . $skipQuestions->unique()->all());
+            Log::debug( "skip");
+            Log::debug( "skip" .$skipQuestions->unique()->all());
             $question = Questions::where('id', 'not in', $skipQuestions->unique()->all())->first();
             $answers = $question->answers;
             Log::debug("question" . $skipQuestions->unique()->all());
