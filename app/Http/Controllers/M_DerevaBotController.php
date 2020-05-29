@@ -102,10 +102,13 @@ class M_DerevaBotController extends Controller
         $collection = collect($collectionCache);
         $skipQuestions = [];
         Log::debug("Quiz \n" . $quiz);
-        if (isset($quiz->question)) {
+        if (isset($quiz->options)) {
+
             $skipQuestions = $collection->pluck('id');
             $answeredQuestion = $collection->pop();
-            if ($answeredQuestion['answerIndex'] == $quiz->correctOptionId) {
+            $options = $quiz->options;
+            foreach ($options as $optionKey => $option) {
+            if ($option->voterCount == 1 && $answeredQuestion['answerIndex'] == $optionKey) {
                 $answeredQuestion['score'] = 1;
             }
             $collection->push($answeredQuestion);
