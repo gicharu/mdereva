@@ -82,7 +82,7 @@ class M_DerevaBotController extends Controller
 //            ->row(Keyboard::button(['text' => 'Contacts']));
         return $this->telegram->sendMessage(
             [
-                'chat_id' => $update->getChat()->getId(),
+                'chat_id' => $update->getChat()->id,
                 'text' => $text,
                 'reply_markup' => $keyboard
             ]
@@ -146,7 +146,10 @@ class M_DerevaBotController extends Controller
                 'score' => 0
             ]
         );
-        $chatId = $update->getChat()->id;
+        $chatId = Cache::get($username.chat_id;
+        if(isset($chatId)) {
+            $chatId = $update->getChat()->id;
+        }
         Log::debug(secure_url($question->media));
         Log::debug(Storage::disk('media')->exists($question->media));
         if (Storage::disk('media')->exists($question->media)) {
