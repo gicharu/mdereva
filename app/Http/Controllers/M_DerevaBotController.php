@@ -70,9 +70,9 @@ class M_DerevaBotController extends Controller
 
     protected function start(Update $update)
     {
-        $name = $update->getMessage()->getFrom()->getFirstName();
-//        echo $name; die;
-        $text = "Hello, $name! Please select an item from the menu to proceed";
+        $username = $update->getChat()->firstName . '_' . $update->getChat()->lastName;
+        Cache::put("$username.collection", null);
+        $text = "Hello, $username! Please select an item from the menu to proceed";
         $keyboard = Keyboard::make()
             ->setResizeKeyboard(true)
             ->row(Keyboard::button(['text' => "Begin free quiz"]))
@@ -102,7 +102,7 @@ class M_DerevaBotController extends Controller
         $collection = collect($collectionCache);
         $skipQuestions = [];
         Log::debug("collection \n" . $collection);
-        Log::debug("Quiz \n" . $quiz->options);
+        Log::debug("Quiz \n" . $quiz);
         if ($quiz->isNotEmpty()) {
             Log::debug("inside");
 
