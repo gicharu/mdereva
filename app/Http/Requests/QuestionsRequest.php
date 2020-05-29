@@ -27,7 +27,7 @@ class QuestionsRequest extends FormRequest
     {
         return [
              'question' => 'required',
-            'media' => 'mimes:mp4,mp3,avi,3gp,jpg,jpeg,png,gif'
+            'media' => 'mimes:video/3gpp, video/mp4,video/x-msvideo,jpg,jpeg,png,gif'
         ];
     }
 
