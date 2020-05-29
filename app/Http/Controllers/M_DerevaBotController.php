@@ -136,7 +136,7 @@ class M_DerevaBotController extends Controller
         if (isset($question->duration)) {
             $duration = $question->duration;
         }
-//        Log::debug($quiz->get('id')); die;
+        Log::debug($question);
         $quiz->options = $answersArray;
         $collection->push([
             'id' => $question->id,
