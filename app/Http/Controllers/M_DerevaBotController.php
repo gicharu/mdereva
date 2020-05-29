@@ -102,6 +102,7 @@ class M_DerevaBotController extends Controller
         $skipQuestions = collect([]);
         Log::debug("collection \n" . $collection);
         Log::debug("Quiz \n" . $quiz);
+        $answers = [];
         if (!is_null($quiz)) {
 
             $skipQuestions = collect($collection->pluck('id'));
@@ -116,10 +117,14 @@ class M_DerevaBotController extends Controller
             $collection->push($answeredQuestion);
             Log::debug($answeredQuestion);
             Log::debug($skipQuestions->all());
+
         }
-        if ($skipQuestions->count() > 1) {
-            Log::debug($skipQuestions->unique()->all());
+        if ($skipQuestions->count() > 0) {
+            Log::debug("skip" . $skipQuestions->unique()->all());
             $question = Questions::where('id', 'not in', $skipQuestions->unique()->all())->first();
+            $answers = $question->answers;
+            Log::debug("question" . $skipQuestions->unique()->all());
+
         } else {
             $question = Questions::first();
         }
@@ -128,7 +133,6 @@ class M_DerevaBotController extends Controller
         if (is_null($question)) {
             $this->scoreQuiz($update, $collection);
         }
-        $answers = $question->answers;
 
         $answersArray = [];
         $answerOption = new PollOption($update);
@@ -204,7 +208,7 @@ class M_DerevaBotController extends Controller
             ]
         );
 
-        Cache::put("$username.collection", null);
+        Cache::put("$username.collection", collect([]));
         $text = "Hello, $username! Please select an item from the menu to proceed";
         $keyboard = Keyboard::make()
             ->setResizeKeyboard(true)
