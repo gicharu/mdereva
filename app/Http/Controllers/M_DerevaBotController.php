@@ -105,7 +105,7 @@ class M_DerevaBotController extends Controller
         if (!is_null($quiz)) {
             Log::debug("inside");
 
-            $skipQuestions = $collection->pluck('id');
+            $skipQuestions = collect($collection->pluck('id'));
             $answeredQuestion = $collection->pop();
             $options = $quiz->options;
             foreach ($options as $optionKey => $option) {
