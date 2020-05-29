@@ -97,7 +97,7 @@ class M_DerevaBotController extends Controller
             $quiz = new Poll($update);
         }
 
-        Log::debug("Quiz here \n" . $quiz);
+        Log::debug("Quiz here 100 \n" . $quiz);
         $username = Cache::get('username');
         $collectionCache = Cache::get("$username.collection");
         $collection = collect($collectionCache);
@@ -136,7 +136,7 @@ class M_DerevaBotController extends Controller
         if (isset($question->duration)) {
             $duration = $question->duration;
         }
-        Log::debug($question);
+        Log::debug("Quiz obj 139 \n $quiz");
         $quiz->options = $answersArray;
         $collection->push([
             'id' => $question->id,
