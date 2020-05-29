@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Questions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -59,7 +60,7 @@ class M_DerevaBotController extends Controller
             //$chatId = $update->getChat()->getId();
             switch ($message->text) {
                 case "Begin free quiz":
-                    return $this->nextQuestion($update, $request);
+                    return $this->nextQuestion($update);
                     break;
             }
         }
@@ -93,7 +94,7 @@ class M_DerevaBotController extends Controller
     {
         $quiz = null;
 
-        if($update->isType('poll')) {
+        if ($update->isType('poll')) {
             $quiz = new Poll($update);
         }
 
@@ -102,24 +103,25 @@ class M_DerevaBotController extends Controller
         $collectionCache = Cache::get("$username.collection");
         $collection = collect($collectionCache);
         $skipQuestions = [];
-        if(isset($quiz->question)) {
+        if (isset($quiz->question)) {
             $skipQuestions = $collection->pluck('id');
             $answeredQuestion = $collection->pop();
-            if($answeredQuestion['answerIndex'] == $quiz->correctOptionId) {
+            if ($answeredQuestion['answerIndex'] == $quiz->correctOptionId) {
                 $answeredQuestion['score'] = 1;
-
             }
             $collection->push($answeredQuestion);
             Log::debug($collection);
             Log::debug($skipQuestions);
         }
         //Log::debug($update->getMessage()->poll->question);
-        if(count($skipQuestions) > 1) {
+        if (count($skipQuestions) > 1) {
             $question = Questions::where('id', 'not in', $skipQuestions)->first();
-
         } else {
-
             $question = Questions::first();
+        }
+
+        if ($question->isEmpty()) {
+            $this->scoreQuiz($update, $collection);
         }
         $answers = $question->answers;
 
@@ -136,14 +138,15 @@ class M_DerevaBotController extends Controller
         if (isset($question->duration)) {
             $duration = $question->duration;
         }
-        Log::debug("Quiz obj 139 \n $quiz");
-        $quiz->options = $answersArray;
-        $collection->push([
-            'id' => $question->id,
-            'question' => $question,
-            'answerIndex' => $correctAnswer,
-            'score' => 0
-        ]);
+        Log::debug("Quiz obj 139 \n $question");
+        $collection->push(
+            [
+                'id' => $question->id,
+                'question' => $question,
+                'answerIndex' => $correctAnswer,
+                'score' => 0
+            ]
+        );
         $chatId = Cache::get("$username.chat_id");
         Log::debug(secure_url($question->media));
         Log::debug(Storage::disk('media')->exists($question->media));
@@ -176,6 +179,22 @@ class M_DerevaBotController extends Controller
                 'close_date' => $duration
             ]
         );
+    }
+
+    private function scoreQuiz(Update $update, Collection $collection)
+    {
+        $result = $collection->sum('score');
+        $total = $collection->count();
+        $message = "Congratulations you have scored <br /> <b>$result / $total</b>"
+        $this->telegram->sendMessage(
+            [
+                'chat_id' => $update->getChat()->id,
+                'text' => $message,
+                'parse_mode' => 'HTML'
+            ]
+        );
+
+        return $this->start($update);
     }
 
 }
