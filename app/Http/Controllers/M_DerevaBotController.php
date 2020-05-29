@@ -99,7 +99,7 @@ class M_DerevaBotController extends Controller
         $username = Cache::get('username');
         $collectionCache = Cache::get("$username.collection");
         $collection = collect($collectionCache);
-        $skipQuestions = [];
+        $skipQuestions = collect([]);
         Log::debug("collection \n" . $collection);
         Log::debug("Quiz \n" . $quiz);
         if (!is_null($quiz)) {
