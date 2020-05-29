@@ -126,7 +126,6 @@ class M_DerevaBotController extends Controller
 
             $question = Questions::whereNotIn('id', $skipArray)->first();
             Log::debug("question");
-            Log::debug(var_dump($question));
 
         } else {
             $question = Questions::first();
@@ -134,7 +133,7 @@ class M_DerevaBotController extends Controller
 
         }
         Log::debug("Collection obj 126 \n $collection");
-        Log::debug("Question obj 126 \n $question");
+        Log::debug(var_dump($question));
 
         if (count($question)) {
             $this->scoreQuiz($update, $collection);
