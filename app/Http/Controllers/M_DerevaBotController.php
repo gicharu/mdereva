@@ -91,21 +91,30 @@ class M_DerevaBotController extends Controller
 
     protected function nextQuestion(Update $update)
     {
-        $quiz = new Poll($update);
+        $quiz = null;
 
-        Log::debug("Quiz here \n" . $quiz->question);
+        if($update->isType('poll')) {
+            $quiz = new Poll($update);
+        }
+
+        Log::debug("Quiz here \n" . $quiz);
         $username = Cache::get('username');
         $collectionCache = Cache::get("$username.collection");
         $collection = collect($collectionCache);
         $skipQuestions = [];
         if(isset($quiz->question)) {
             $skipQuestions = $collection->pluck('id');
-            $collectionKey = $collection->search($quiz->question);
-            Log::debug($collectionKey);
+            $answeredQuestion = $collection->pop();
+            if($answeredQuestion['answerIndex'] == $quiz->correctOptionId) {
+                $answeredQuestion['score'] = 1;
+
+            }
+            $collection->push($answeredQuestion);
+            Log::debug($collection);
             Log::debug($skipQuestions);
         }
         //Log::debug($update->getMessage()->poll->question);
-        $question = Questions::inRandomOrder()->first();
+        $question = Questions::where('id', 'not in', $skipQuestions)->first();
         $answers = $question->answers;
 
         $answersArray = [];
