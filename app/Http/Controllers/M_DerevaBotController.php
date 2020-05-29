@@ -103,7 +103,6 @@ class M_DerevaBotController extends Controller
         Log::debug("collection \n" . $collection);
         Log::debug("Quiz \n" . $quiz);
         if (!is_null($quiz)) {
-            Log::debug("inside");
 
             $skipQuestions = collect($collection->pluck('id'));
             $answeredQuestion = $collection->pop();
@@ -124,6 +123,7 @@ class M_DerevaBotController extends Controller
         } else {
             $question = Questions::first();
         }
+        Log::debug("Question obj 126 \n $question");
 
         if (is_null($question)) {
             $this->scoreQuiz($update, $collection);
@@ -143,7 +143,6 @@ class M_DerevaBotController extends Controller
         if (isset($question->duration)) {
             $duration = $question->duration;
         }
-        Log::debug("Question obj 139 \n $question");
         $collection->push(
             [
                 'id' => $question->id,
