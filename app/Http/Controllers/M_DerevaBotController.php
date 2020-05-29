@@ -71,7 +71,6 @@ class M_DerevaBotController extends Controller
     protected function start(Update $update)
     {
         $username = $update->getChat()->firstName . '_' . $update->getChat()->lastName;
-        Cache::put("$username.collection", null);
         $text = "Hello, $username! Please select an item from the menu to proceed";
         $keyboard = Keyboard::make()
             ->setResizeKeyboard(true)
@@ -119,8 +118,8 @@ class M_DerevaBotController extends Controller
             Log::debug($collection->all());
             Log::debug($skipQuestions->all());
         }
-        //Log::debug($update->getMessage()->poll->question);
         if (count($skipQuestions) > 1) {
+            Log::debug($skipQuestions->unique()->all());
             $question = Questions::where('id', 'not in', $skipQuestions->unique()->all())->first();
         } else {
             $question = Questions::first();
@@ -206,7 +205,20 @@ class M_DerevaBotController extends Controller
             ]
         );
 
-        return $this->start($update);
+        Cache::put("$username.collection", null);
+        $text = "Hello, $username! Please select an item from the menu to proceed";
+        $keyboard = Keyboard::make()
+            ->setResizeKeyboard(true)
+            ->row(Keyboard::button(['text' => "Begin free quiz"]))
+            ->row(Keyboard::button(['text' => "Register"]));
+
+        return $this->telegram->sendMessage(
+            [
+                'chat_id' => $update->getChat()->id,
+                'text' => $text,
+                'reply_markup' => $keyboard
+            ]
+        );
     }
 
 }
