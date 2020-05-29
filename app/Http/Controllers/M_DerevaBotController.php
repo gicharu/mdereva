@@ -49,7 +49,6 @@ class M_DerevaBotController extends Controller
     {
         $update = $this->telegram->getWebhookUpdate();
         $message = $update->getMessage();
-        $chatId = null;
         if ($update->isType('poll')) {
             return $this->nextQuestion($update);
         }
@@ -147,7 +146,7 @@ class M_DerevaBotController extends Controller
                 'score' => 0
             ]
         );
-        $chatId = Cache::get("$username.chat_id");
+        $chatId = $update->getChat()->id;
         Log::debug(secure_url($question->media));
         Log::debug(Storage::disk('media')->exists($question->media));
         if (Storage::disk('media')->exists($question->media)) {
