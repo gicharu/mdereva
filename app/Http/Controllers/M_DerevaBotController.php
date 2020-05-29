@@ -114,7 +114,7 @@ class M_DerevaBotController extends Controller
                 }
             }
             $collection->push($answeredQuestion);
-            Log::debug($collection->all());
+            Log::debug($answeredQuestion);
             Log::debug($skipQuestions->all());
         }
         if ($skipQuestions->count() > 1) {
