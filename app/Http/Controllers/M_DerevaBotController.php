@@ -154,8 +154,8 @@ class M_DerevaBotController extends Controller
         }
         $collection->push(
             [
-                'id' => $question['id'],
-                'question' => $question['question'],
+                'id' => $question->id,
+                'question' => $question->question,
                 'answerIndex' => $correctAnswer,
                 'score' => 0
             ]
@@ -164,21 +164,23 @@ class M_DerevaBotController extends Controller
         if (!isset($chatId)) {
             $chatId = $update->getChat()->id;
         }
-        if (Storage::disk('media')->exists($question['media'])) {
-            if ($question['mediaType'] == Questions::QUESTION_MEDIA_TYPE_IMAGE) {
+        Log::debug(secure_url($question->media));
+        Log::debug(Storage::disk('media')->exists($question->media));
+        if (Storage::disk('media')->exists($question->media)) {
+            if ($question->mediaType == Questions::QUESTION_MEDIA_TYPE_IMAGE) {
                 $this->telegram->sendPhoto(
                     [
                         'chat_id' => $chatId,
 //                'photo'=> secure_url($question->media)
-                        'photo' => InputFile::create($question['media'])
+                        'photo' => InputFile::create($question->media)
                     ]
                 );
             }
-            if ($question['mediaType'] == Questions::QUESTION_MEDIA_TYPE_VIDEO) {
+            if ($question->mediaType == Questions::QUESTION_MEDIA_TYPE_VIDEO) {
                 $this->telegram->sendVideo(
                     [
                         'chat_id' => $chatId,
-                        'video' => InputFile::create($question['media'])
+                        'video' => InputFile::create($question->media)
                     ]
                 );
             }
@@ -188,7 +190,7 @@ class M_DerevaBotController extends Controller
             [
                 'chat_id' => $chatId,
                 'type' => 'quiz',
-                'question' => $question['question'],
+                'question' => $question->question,
                 'options' => $answersArray,
                 'correct_option_id' => $correctAnswer,
                 'close_date' => $duration
