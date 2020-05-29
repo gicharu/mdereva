@@ -214,7 +214,7 @@ class M_DerevaBotController extends Controller
 
         return $this->telegram->sendMessage(
             [
-                'chat_id' => $update->getChat()->id,
+                'chat_id' => $chatId,
                 'text' => $text,
                 'reply_markup' => $keyboard
             ]
