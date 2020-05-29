@@ -201,7 +201,8 @@ class M_DerevaBotController extends Controller
     {
         $result = $collection->sum('score');
         $total = $collection->count();
-        $message = "Congratulations you have scored \n <b>$result out of $total</b>";
+        $percentage = ($result / $total) * 100;
+        $message = "Congratulations you have scored: \n <b> $percentage% ($result / $total)</b>";
         $username = Cache::get('username');
         $chatId = Cache::get("$username.chat_id");
         $this->telegram->sendMessage(
