@@ -95,7 +95,7 @@ class M_DerevaBotController extends Controller
         $quiz = null;
 
         if ($update->isType('poll')) {
-            $quiz = new Poll($update);
+            $quiz = new Poll($update->poll);
         }
 
         Log::debug("Quiz here 100 \n" . $quiz->question);
