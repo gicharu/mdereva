@@ -146,7 +146,7 @@ class M_DerevaBotController extends Controller
                 'score' => 0
             ]
         );
-        $chatId = Cache::get($username.chat_id;
+        $chatId = Cache::get("$username.chat_id");
         if(isset($chatId)) {
             $chatId = $update->getChat()->id;
         }
