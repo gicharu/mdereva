@@ -126,7 +126,7 @@ class M_DerevaBotController extends Controller
 
             $question = Questions::whereNotIn('id', $skipArray)->first();
             Log::debug("question");
-            Log::debug($question);
+            Log::debug(var_dump($question));
 
         } else {
             $question = Questions::first();
