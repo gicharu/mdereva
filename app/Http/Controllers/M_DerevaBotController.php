@@ -103,7 +103,7 @@ class M_DerevaBotController extends Controller
         $skipQuestions = [];
         Log::debug("collection \n" . $collection);
         Log::debug("Quiz \n" . $quiz);
-        if ($quiz->isNotEmpty()) {
+        if (!is_null($quiz)) {
             Log::debug("inside");
 
             $skipQuestions = $collection->pluck('id');
