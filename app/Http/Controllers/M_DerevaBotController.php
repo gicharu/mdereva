@@ -135,7 +135,7 @@ class M_DerevaBotController extends Controller
         Log::debug("Collection obj 126 \n $collection");
         Log::debug(var_dump($question));
 
-        if (count($question)) {
+        if (is_null($question)) {
             $this->scoreQuiz($update, $collection);
         }
 
