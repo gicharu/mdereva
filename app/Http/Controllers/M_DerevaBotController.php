@@ -120,7 +120,7 @@ class M_DerevaBotController extends Controller
             $question = Questions::first();
         }
 
-        if ($question->isEmpty()) {
+        if (is_null($question)) {
             $this->scoreQuiz($update, $collection);
         }
         $answers = $question->answers;
