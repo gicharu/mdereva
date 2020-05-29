@@ -133,7 +133,7 @@ class M_DerevaBotController extends Controller
         }
         Log::debug($question);
         if (is_null($question)) {
-            $this->scoreQuiz($update, $collection);
+            return $this->scoreQuiz($update, $collection);
         }
         $answers = $question->answers;
         Log::debug("Collection obj 126 \n $collection");
