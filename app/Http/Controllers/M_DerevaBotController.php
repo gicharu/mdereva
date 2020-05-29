@@ -200,7 +200,7 @@ class M_DerevaBotController extends Controller
         $chatId = Cache::get("$username.chat_id");
         $this->telegram->sendMessage(
             [
-                'chat_id' => $update->getChat()->id,
+                'chat_id' => $chatId,
                 'text' => $message,
                 'parse_mode' => 'HTML'
             ]
