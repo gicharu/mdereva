@@ -80,7 +80,7 @@ class M_DerevaBotController extends Controller
         if (!empty($update->getMessage()->chat->id)) {
             return $update->getMessage()->chat->id;
         }
-        return $update->poll->get('chat_id');
+        return $update->message->poll->id;
     }
 
     protected function start(Update $update)
