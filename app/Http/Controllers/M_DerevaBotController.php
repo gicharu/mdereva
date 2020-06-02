@@ -54,8 +54,8 @@ class M_DerevaBotController extends Controller
         }
         if (isset($message)) {
             $username = $message->chat->firstName;
-            Cache::put("username", $username);
-            Cache::put("$username.chat_id", $message->chat->id);
+            Cache::put("username.$message->chat->id}", $username);
+            Cache::put("$username.chat_id_{$message->chat->id}", $message->chat->id);
             //$chatId = $update->getChat()->getId();
             switch ($message->text) {
                 case "Begin free quiz":
@@ -68,9 +68,17 @@ class M_DerevaBotController extends Controller
         return $this->start($update);
     }
 
+    private function getUsername($chatId) {
+        return Cache::get("username.$chatId");
+    }
+
+    private function getChatId(Update $update) {
+        return $update->getMessage()->chat->id;
+    }
+
     protected function start(Update $update)
     {
-        $username = $update->getChat()->firstName . '_' . $update->getChat()->lastName;
+        $username = $this->getUsername($this->getChatId());
         $text = "Hello, $username! Please select an item from the menu to proceed";
         $keyboard = Keyboard::make()
             ->setResizeKeyboard(true)
@@ -81,7 +89,7 @@ class M_DerevaBotController extends Controller
 //            ->row(Keyboard::button(['text' => 'Contacts']));
         return $this->telegram->sendMessage(
             [
-                'chat_id' => $update->getChat()->id,
+                'chat_id' => $this->getChatId(),
                 'text' => $text,
                 'reply_markup' => $keyboard
             ]
@@ -95,9 +103,10 @@ class M_DerevaBotController extends Controller
         if ($update->isType('poll')) {
             $quiz = new Poll($update->poll);
         }
+        $chatId = $this->getChatId($update);
 
-        $username = Cache::get('username');
-        $collectionCache = Cache::get("$username.collection");
+        $username = $this->getUsername($chatId);
+        $collectionCache = Cache::get("$username.$chatId.collection");
         $collection = collect($collectionCache);
         $skipQuestions = collect([]);
         Log::debug("collection \n" . $collection);
@@ -159,10 +168,7 @@ class M_DerevaBotController extends Controller
                 'score' => 0
             ]
         );
-        $chatId = Cache::get("$username.chat_id");
-        if (!isset($chatId)) {
-            $chatId = $update->getChat()->id;
-        }
+
         Log::debug(secure_url($question->media));
         Log::debug(Storage::disk('media')->exists($question->media));
         if (Storage::disk('media')->exists($question->media)) {
@@ -179,12 +185,13 @@ class M_DerevaBotController extends Controller
                 $this->telegram->sendVideo(
                     [
                         'chat_id' => $chatId,
-                        'video' => InputFile::create($question->media)
+                        'video' => InputFile::create($question->media),
+                        'supports_streaming' => true
                     ]
                 );
             }
         }
-        Cache::put("$username.collection", $collection);
+        Cache::put("$username.$chatId.collection", $collection);
         return $this->telegram->sendPoll(
             [
                 'chat_id' => $chatId,
@@ -201,10 +208,10 @@ class M_DerevaBotController extends Controller
     {
         $result = $collection->sum('score');
         $total = $collection->count();
-        $percentage = ($result / $total) * 100;
+        $percentage = round(($result / $total) * 100);
         $message = "Congratulations you have scored: \n <b> $percentage% ($result / $total)</b>";
         $username = Cache::get('username');
-        $chatId = Cache::get("$username.chat_id");
+        $chatId = $this->getChatId($update);
         $this->telegram->sendMessage(
             [
                 'chat_id' => $chatId,

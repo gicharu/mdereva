@@ -27,7 +27,7 @@ class AnswersRequest extends FormRequest
     {
         return [
              'questionId' => 'required',
-             'answer' => 'required|min:5|max:255'
+             'answer' => 'required|min:5|max:100'
         ];
     }
 
