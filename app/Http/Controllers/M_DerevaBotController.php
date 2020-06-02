@@ -73,6 +73,7 @@ class M_DerevaBotController extends Controller
     }
 
     private function getChatId(Update $update) {
+        Log::debug($update);
         return $update->getMessage()->chat->id;
     }
 
