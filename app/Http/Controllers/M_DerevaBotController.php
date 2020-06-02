@@ -76,8 +76,8 @@ class M_DerevaBotController extends Controller
 
     private function getChatId(Update $update)
     {
-        Log::debug($update);
-        if (!empty($update->message->chat->id)) {
+        Log::debug($update->getChat()->id);
+        if ($update->getChat()->isNotEmpty()) {
             return $update->message->chat->id;
         }
         Log::debug($update->message);
