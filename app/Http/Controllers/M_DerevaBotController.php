@@ -72,9 +72,14 @@ class M_DerevaBotController extends Controller
         return Cache::get("username.$chatId");
     }
 
-    private function getChatId(Update $update) {
+    private function getChatId(Update $update)
+    {
         Log::debug($update);
-        return $update->getMessage()->chat->id;
+        if(isset($update->getMessage()->chat->id)) {
+            return $update->getMessage()->chat->id;
+        }
+            return $update->getChat()->id;
+        
     }
 
     protected function start(Update $update)
