@@ -69,18 +69,18 @@ class M_DerevaBotController extends Controller
         return $this->start($update);
     }
 
-    private function getUsername($chatId) {
+    private function getUsername($chatId)
+    {
         return Cache::get("username.$chatId");
     }
 
     private function getChatId(Update $update)
     {
         Log::debug($update);
-        if(isset($update->getMessage()->chat->id)) {
+        if (!empty($update->getMessage()->chat->id)) {
             return $update->getMessage()->chat->id;
         }
-            return $update->poll->get('chat_id');
-
+        return $update->poll->get('chat_id');
     }
 
     protected function start(Update $update)
@@ -121,7 +121,6 @@ class M_DerevaBotController extends Controller
         Log::debug("Quiz \n" . $quiz);
         $answers = [];
         if (!is_null($quiz)) {
-
             $skipQuestions = collect($collection->pluck('id'));
             $answeredQuestion = $collection->pop();
             $options = $quiz->options;
@@ -133,7 +132,6 @@ class M_DerevaBotController extends Controller
             }
             $collection->push($answeredQuestion);
             Log::debug($answeredQuestion);
-
         }
         $rsQuestions = Questions::limit(10)->get();
         if ($skipQuestions->count() > 0) {
@@ -142,11 +140,8 @@ class M_DerevaBotController extends Controller
             $question = $rsQuestions->whereNotIn('id', $skipArray)->first();
             Log::debug("question");
             Log::debug($question);
-
-
         } else {
             $question = $rsQuestions->first();
-
         }
         Log::debug($question);
         if (is_null($question)) {
