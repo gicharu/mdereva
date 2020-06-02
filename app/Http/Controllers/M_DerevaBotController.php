@@ -14,6 +14,7 @@ use Telegram\Bot\Api;
 use Telegram\Bot\Exceptions\TelegramSDKException;
 use Telegram\Bot\FileUpload\InputFile;
 use Telegram\Bot\Keyboard\Keyboard;
+use Telegram\Bot\Laravel\Facades\Telegram;
 use Telegram\Bot\Objects\Poll;
 use Telegram\Bot\Objects\PollOption;
 use Telegram\Bot\Objects\Update;
@@ -78,8 +79,8 @@ class M_DerevaBotController extends Controller
         if(isset($update->getMessage()->chat->id)) {
             return $update->getMessage()->chat->id;
         }
-            return $update->getChat()->id;
-        
+            return $this->telegram->getMe()->id;
+
     }
 
     protected function start(Update $update)
