@@ -79,7 +79,7 @@ class M_DerevaBotController extends Controller
         if(isset($update->getMessage()->chat->id)) {
             return $update->getMessage()->chat->id;
         }
-            return $this->telegram->getMe()->id;
+            return $update->poll->get('chat_id');
 
     }
 
