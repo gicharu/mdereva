@@ -78,7 +78,8 @@ class M_DerevaBotController extends Controller
 
     protected function start(Update $update)
     {
-        $username = $this->getUsername($this->getChatId());
+        $chatId = $this->getChatId($update);
+        $username = $this->getUsername($chatId);
         $text = "Hello, $username! Please select an item from the menu to proceed";
         $keyboard = Keyboard::make()
             ->setResizeKeyboard(true)
@@ -89,7 +90,7 @@ class M_DerevaBotController extends Controller
 //            ->row(Keyboard::button(['text' => 'Contacts']));
         return $this->telegram->sendMessage(
             [
-                'chat_id' => $this->getChatId(),
+                'chat_id' => $chatId,
                 'text' => $text,
                 'reply_markup' => $keyboard
             ]
