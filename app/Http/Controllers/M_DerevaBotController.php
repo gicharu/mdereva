@@ -85,7 +85,7 @@ class M_DerevaBotController extends Controller
             Log::debug($update->poll->id);
             $chatId = Cache::get("{$update->poll->id}.chatId");
             Log::debug($chatId);
-            return Cache::get("{$update->poll->id}.chatId");
+            return $chatId;
         }
     }
 
@@ -107,6 +107,7 @@ class M_DerevaBotController extends Controller
 
     protected function start(Update $update)
     {
+
         $chatId = $this->getChatId($update);
         $username = $this->getUsername($chatId);
         $text = "Hello, $username! Please select an item from the menu to proceed";
@@ -210,7 +211,7 @@ class M_DerevaBotController extends Controller
                 $this->telegram->sendVideo(
                     [
                         'chat_id' => $chatId,
-                        'video' => InputFile::create($question->media),
+                        'video' => InputFile::create(secure_url($question->media)),
                         'supports_streaming' => true
                     ]
                 );
@@ -246,7 +247,7 @@ class M_DerevaBotController extends Controller
             ]
         );
 
-        Cache::put("$username.collection", collect([]));
+        Cache::forget("$username.collection");
         $text = "Hello, $username! Please select an item from the menu to proceed";
         $keyboard = Keyboard::make()
             ->setResizeKeyboard(true)
