@@ -82,7 +82,9 @@ class M_DerevaBotController extends Controller
         }
         if($update->isType('poll')) {
             Log::debug("chatid poll id");
-            Log::debug(Cache::get("{$update->poll->id}.chatId"));
+            Log::debug($update->poll->id);
+            $chatId = Cache::get("{$update->poll->id}.chatId");
+            Log::debug($chatId);
             return Cache::get("{$update->poll->id}.chatId");
         }
     }
