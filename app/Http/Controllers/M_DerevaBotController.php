@@ -81,6 +81,7 @@ class M_DerevaBotController extends Controller
             return $update->message->chat->id;
         }
         if($update->isType('poll')) {
+            Log::debug(Cache::get("{$update->poll->id}.chatId"));
             return Cache::get("{$update->poll->id}.chatId");
         }
     }
@@ -99,6 +100,7 @@ class M_DerevaBotController extends Controller
     private function setChatIdFromPoll(Poll $poll, $chatId)
     {
         Cache::put("{$poll->id}.chatId", $chatId);
+        Log::debug("chatid poll id");
     }
 
     protected function start(Update $update)
