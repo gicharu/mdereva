@@ -56,7 +56,7 @@ class M_DerevaBotController extends Controller
         if (isset($message)) {
             $username = $message->chat->firstName;
             Cache::put("username.$message->chat->id}", $username);
-            Cache::put("$username.chat_id_{$message->chat->id}", $message->chat->id);
+            $this->setChatId($update);
             //$chatId = $update->getChat()->getId();
             switch ($message->text) {
                 case "Begin free quiz":
@@ -80,7 +80,25 @@ class M_DerevaBotController extends Controller
         if ($update->getChat()->isNotEmpty()) {
             return $update->message->chat->id;
         }
-        Log::debug($update->message);
+        if($update->isType('poll')) {
+            return Cache::get("{$update->poll->id}.chatId");
+        }
+    }
+
+    private function setChatId(Update $update)
+    {
+        if ($update->isType('message')) {
+            $chatId = $update->getMessage()->chat->id;
+            $username = $update->getMessage()->chat->firstName;
+            Cache::put("$username.chatId}", $chatId);
+        }
+
+
+    }
+
+    private function setChatIdFromPoll(Poll $poll, $chatId)
+    {
+        Cache::put("{$poll->id}.chatId", $chatId);
     }
 
     protected function start(Update $update)
@@ -195,7 +213,7 @@ class M_DerevaBotController extends Controller
             }
         }
         Cache::put("$username.$chatId.collection", $collection);
-        return $this->telegram->sendPoll(
+        $response = $this->telegram->sendPoll(
             [
                 'chat_id' => $chatId,
                 'type' => 'quiz',
@@ -205,6 +223,7 @@ class M_DerevaBotController extends Controller
                 'close_date' => $duration
             ]
         );
+        $this->setChatIdFromPoll($response->poll, $chatId);
     }
 
     private function scoreQuiz(Update $update, Collection $collection)
