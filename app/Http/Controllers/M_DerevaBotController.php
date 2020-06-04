@@ -211,7 +211,8 @@ class M_DerevaBotController extends Controller
                 $this->telegram->sendVideo(
                     [
                         'chat_id' => $chatId,
-                        'video' => InputFile::create($question->media),
+//                        'video' => InputFile::create($question->media),
+                        'video' => secure_url($question->media),
                         'supports_streaming' => true
                     ]
                 );
