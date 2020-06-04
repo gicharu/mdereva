@@ -212,7 +212,7 @@ class M_DerevaBotController extends Controller
                     [
                         'chat_id' => $chatId,
 //                        'video' => InputFile::create($question->media),
-                        'video' => secure_url($question->media),
+                        'video' => new InputFile(public_path($question->media)),
                         'supports_streaming' => true
                     ]
                 );
