@@ -28,8 +28,22 @@ class AnswersCrudController extends CrudController
 
     protected function setupListOperation()
     {
-        // TODO: remove setFromDb() and manually define Columns, maybe Filters
-        $this->crud->setFromDb();
+        $this->crud->addColumn(
+            [
+                'label' => "Question", // Table column heading
+                'type' => "text",
+                'name' => 'questionId', // the column that contains the ID of that connected entity;
+                'entity' => 'question', // the method that defines the relationship in your Model
+                'attribute' => "question", // foreign key attribute that is shown to user
+                'model' => 'App\Models\Question' // foreign key model
+            ]
+        );
+        $this->crud->addColumn(
+            [
+                'name' => 'answer', // The db column name
+                'type' => 'Text',
+            ]
+        );
     }
 
     protected function setupCreateOperation()
@@ -49,19 +63,25 @@ class AnswersCrudController extends CrudController
     {
         $this->crud->setValidation(AnswersRequest::class);
 
-        $this->crud->addField([
-            'name' => 'questionId',
-            'type' => 'select',
-            'entity' => 'question',
-            'attribute' => 'question'
-        ]);
-        $this->crud->addField([
-            'name' => 'answer',
-            'type' => 'textarea',
-        ]);
-        $this->crud->addField([
-            'name' => 'correct',
-            'type' => 'checkbox',
-        ]);
+        $this->crud->addField(
+            [
+                'name' => 'questionId',
+                'type' => 'select',
+                'entity' => 'question',
+                'attribute' => 'question'
+            ]
+        );
+        $this->crud->addField(
+            [
+                'name' => 'answer',
+                'type' => 'textarea',
+            ]
+        );
+        $this->crud->addField(
+            [
+                'name' => 'correct',
+                'type' => 'checkbox',
+            ]
+        );
     }
 }

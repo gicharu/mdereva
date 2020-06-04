@@ -26,7 +26,7 @@ class QuestionsRequest extends FormRequest
     public function rules()
     {
         return [
-             'question' => 'required',
+            'question' => 'required',
             'media' => "mimes:bin,mp4,avi,3gp,jpg,jpeg,png,gif"
         ];
     }
