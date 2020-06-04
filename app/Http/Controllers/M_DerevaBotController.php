@@ -208,11 +208,11 @@ class M_DerevaBotController extends Controller
                 );
             }
             if ($question->mediaType == Questions::QUESTION_MEDIA_TYPE_VIDEO) {
-                $this->telegram->sendVideo(
+                $this->telegram->sendDocument(
                     [
                         'chat_id' => $chatId,
 //                        'video' => InputFile::create($question->media),
-                        'video' => new InputFile(public_path($question->media)),
+                        'document' => new InputFile(public_path($question->media)),
                         'supports_streaming' => true
                     ]
                 );
