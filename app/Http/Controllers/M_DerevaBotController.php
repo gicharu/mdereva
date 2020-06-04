@@ -211,7 +211,7 @@ class M_DerevaBotController extends Controller
                 $this->telegram->sendVideo(
                     [
                         'chat_id' => $chatId,
-                        'video' => InputFile::create(secure_url($question->media)),
+                        'video' => InputFile::create($question->media),
                         'supports_streaming' => true
                     ]
                 );
@@ -228,6 +228,7 @@ class M_DerevaBotController extends Controller
                 'close_date' => $duration
             ]
         );
+        Log::debug($response);
         $this->setChatIdFromPoll($response->poll, $chatId);
     }
 
@@ -247,7 +248,7 @@ class M_DerevaBotController extends Controller
             ]
         );
 
-        Cache::forget("$username.collection");
+        Cache::forget("$username.$chatId.collection");
         $text = "Hello, $username! Please select an item from the menu to proceed";
         $keyboard = Keyboard::make()
             ->setResizeKeyboard(true)
