@@ -44,6 +44,9 @@ class AnswersCrudController extends CrudController
                 'type' => 'Text',
             ]
         );
+        if (!$this->request->has('order')) {
+            $this->crud->orderBy('questionId');
+        }
     }
 
     protected function setupCreateOperation()
