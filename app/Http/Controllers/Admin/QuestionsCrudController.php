@@ -44,6 +44,11 @@ class QuestionsCrudController extends CrudController
             'name' => 'duration', // The db column name
             'type' => 'Text'
         ]);
+         $this->crud->addColumn([
+            'name' => 'active', // The db column name
+            'type' => 'select_from_array',
+             'options' => ['No', 'Yes']
+        ]);
 
     }
 
@@ -58,6 +63,7 @@ class QuestionsCrudController extends CrudController
                 'media'  => 'Description',
                 'score' => 'Price',
                 'duration' => 'Duration',
+                'active' => 'Active',
             ]
         ]);
     }
