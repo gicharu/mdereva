@@ -198,7 +198,7 @@ class M_DerevaBotController extends Controller
         Log::debug(secure_url($question->media));
         Log::debug(Storage::disk('media')->exists($question->media));
         if (Storage::disk('media')->exists($question->media)) {
-            if ($question->mediaType == Questions::QUESTION_MEDIA_TYPE_IMAGE) {
+            if ($question->media_type == Questions::QUESTION_MEDIA_TYPE_IMAGE) {
                 Log::debug('image');
                 $this->telegram->sendPhoto(
                     [
@@ -208,7 +208,7 @@ class M_DerevaBotController extends Controller
                     ]
                 );
             }
-            if ($question->mediaType == Questions::QUESTION_MEDIA_TYPE_VIDEO) {
+            if ($question->media_type == Questions::QUESTION_MEDIA_TYPE_VIDEO) {
                 Log::debug('video');
                 Log::debug(InputFile::create(public_path($question->media)));
                 $this->telegram->sendDocument(
