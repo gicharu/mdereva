@@ -199,6 +199,7 @@ class M_DerevaBotController extends Controller
         Log::debug(Storage::disk('media')->exists($question->media));
         if (Storage::disk('media')->exists($question->media)) {
             if ($question->mediaType == Questions::QUESTION_MEDIA_TYPE_IMAGE) {
+                Log::debug('image');
                 $this->telegram->sendPhoto(
                     [
                         'chat_id' => $chatId,
@@ -208,12 +209,13 @@ class M_DerevaBotController extends Controller
                 );
             }
             if ($question->mediaType == Questions::QUESTION_MEDIA_TYPE_VIDEO) {
+                Log::debug('video');
                 Log::debug(InputFile::create(public_path($question->media)));
                 $this->telegram->sendDocument(
                     [
                         'chat_id' => $chatId,
 //                        'video' => InputFile::create($question->media),
-                        'document' => InputFile::create(public_path($question->media)),
+                        'document' => InputFile::create($question->media),
                         'supports_streaming' => true
                     ]
                 );
