@@ -22,7 +22,7 @@ class Questions extends BaseModel
     // protected $primaryKey = 'id';
     // public $timestamps = false;
     protected $guarded = ['id'];
-    protected $fillable = ['question', 'media', 'media_type', 'score', 'duration'];
+    protected $fillable = ['question', 'media', 'media_type', 'score', 'duration', 'active'];
     // protected $hidden = [];
     // protected $dates = [];
 
