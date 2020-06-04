@@ -31,7 +31,7 @@ class AnswersCrudController extends CrudController
         $this->crud->addColumn(
             [
                 'label' => "Question", // Table column heading
-                'type' => "text",
+                'type' => "select",
                 'name' => 'questionId', // the column that contains the ID of that connected entity;
                 'entity' => 'question', // the method that defines the relationship in your Model
                 'attribute' => "question", // foreign key attribute that is shown to user
