@@ -102,5 +102,10 @@ class QuestionsCrudController extends CrudController
             'type' => 'number',
             'label' => 'Duration (seconds)'
         ]);
+        $this->crud->addField([
+            'name' => 'active',
+            'type' => 'select_from_array',
+            'options' => ['No','Yes']
+        ]);
     }
 }
